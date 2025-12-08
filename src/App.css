@@ -1,0 +1,126 @@
+/* Basic Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  /* 1. Set the image as background */
+  background-image: url('./assets/background.jpeg'); /* Make sure path is correct */
+  
+  /* 2. Make it cover the whole screen */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  
+  /* 3. Fix it so it doesn't scroll with the page */
+  background-attachment: fixed;
+
+  /* Keep other text styles */
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  height: 100vh;
+  margin: 0;
+}
+
+/* This targets the main app wrapper */
+app-container {
+  /* background-color: rgba(0, 0, 0, 0.7);  <-- REMOVE THIS LINE */
+  
+  height: 100%;
+  width: 100%;
+  /* You can add "position: relative;" here if your absolute elements act weird */
+}
+
+/* --- RETRO SIDE MENU --- */
+.navbar {
+  /* Position it on the right side, vertically centered */
+  position: fixed;
+  right: 25%;             /* 5% space from the right edge */
+  top: 50%;              /* Move down 50% */
+  transform: translateY(-50%); /* Perfect vertical center */
+  
+  /* The "Card" Look (Dark Glass effect) */
+  background-color: rgba(0, 0, 0, 0.85); /* Dark semi-transparent */
+  padding: 40px;
+  border-radius: 20px;   /* Rounded corners like the screenshot */
+  
+  /* Flexbox column to stack buttons vertically */
+  display: flex;
+  flex-direction: column;
+  gap: 25px;             /* Space between buttons */
+  
+  z-index: 1000;
+}
+
+/* The Links (Buttons) */
+.navbar a {
+  font-family: 'Press Start 2P', cursive; /* The Retro Font */
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;       /* Adjust size as needed */
+  text-transform: uppercase; /* Forces CAPS like the screenshot */
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
+  
+  /* Optional: Add a small text shadow for readability */
+  text-shadow: 2px 2px #000000;
+}
+
+/* Hover Effect */
+.navbar a:hover {
+  color: #ff8906;        /* Orange accent on hover */
+  transform: scale(1.1); /* Slightly enlarge the text */
+  text-shadow: 3px 3px #ff4d4d; /* Red shadow on hover */
+}
+
+/* Active Page Indicator */
+.navbar a.active {
+  color: #ff8906; 
+  /* Add a retro "arrow" or indicator before the text if active */
+  border-left: 4px solid #ff8906;
+  padding-left: 10px;
+}
+
+/* Content Styles */
+.content {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  h1, p, a {
+    text-shadow: 2px 2px 4px #000000; /* Strong black shadow behind letters */
+}
+}
+
+.running-container {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 999;
+}
+
+.pixel-runner {
+  height: 200px;        /* size of GIF */
+  transform: scaleX(-1); /* flip horizontally */
+}
+
+/* ChatBox refinements */
+.pixel-card { background: linear-gradient(180deg, rgba(6,6,6,0.86), rgba(10,10,10,0.9)); }
+.pixel-card .font-pixel { letter-spacing: 1px; }
+
+/* custom scrollbars (nice subtle look) */
+.chat-scrollbar::-webkit-scrollbar { width: 10px; height: 10px; }
+.chat-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.chat-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.04); border-radius: 8px; }
+
+/* apply to messages list (we already have overflow-y-auto) */
+.cbx-list { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.06) transparent; }
+
+/* small responsive tweak */
+@media (max-width: 640px) {
+  .pixel-card { border-radius: 8px; }
+  .font-pixel { font-size: 11px; }
+}
+
