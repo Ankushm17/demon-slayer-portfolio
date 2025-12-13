@@ -124,3 +124,52 @@ app-container {
   .font-pixel { font-size: 11px; }
 }
 
+/* =========================
+   MOBILE OVERRIDES (FINAL)
+   ========================= */
+   @media (max-width: 768px) {
+
+    /* NAVBAR — stop fixed positioning */
+    .navbar {
+      position: relative !important;
+      right: auto !important;
+      top: auto !important;
+      transform: none !important;
+  
+      width: 100%;
+      margin: 16px auto;
+  
+      flex-direction: row;
+      justify-content: center;
+      gap: 16px;
+  
+      padding: 16px;
+      border-radius: 12px;
+    }
+  
+    /* CHAT — remove absolute positioning */
+    .chat-position {
+      position: relative !important;
+      left: auto !important;
+      bottom: auto !important;
+  
+      max-width: 100%;
+      margin-top: 24px;
+    }
+  
+    .chat-root {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    /* RUNNER — reduce size */
+    .pixel-runner {
+      height: 120px;
+    }
+  
+    .running-container {
+      top: 8%;
+    }
+  }
+  
+
