@@ -171,5 +171,56 @@ app-container {
       top: 8%;
     }
   }
-  
+
+  /* =========================
+   MOBILE SIZE SCALING
+   ========================= */
+@media (max-width: 768px) {
+
+  /* -------------------------
+     Runner GIF
+     ------------------------- */
+  .pixel-runner {
+    height: 110px;          /* reduce from 200px */
+  }
+
+  .running-container {
+    top: 7%;
+  }
+
+  /* -------------------------
+     ChatBox sizing
+     ------------------------- */
+  .chat-root {
+    width: 100%;
+    max-width: 360px;       /* smaller card */
+    margin: 20px auto;
+  }
+
+  .cbx-list {
+    height: 220px;          /* reduce chat height */
+  }
+
+  .chat-root textarea {
+    font-size: 13px;
+    min-height: 40px;
+  }
+
+  .chat-root input {
+    font-size: 12px;
+  }
+
+  /* -------------------------
+     Navbar buttons
+     ------------------------- */
+  .navbar {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .navbar a {
+    font-size: 0.7rem;      /* smaller pixel font */
+    letter-spacing: 1px;
+  }
+}
 
