@@ -127,75 +127,80 @@
   }
   
 /* =========================
-   MOBILE (≤768px) — COMPACT MODE
+   MOBILE LAYOUT (≤768px)
    ========================= */
-   @media (max-width: 768px) {
+@media (max-width: 768px) {
 
-    /* ---------- NAVBAR ---------- */
-    .navbar {
-      position: relative;
-      right: auto;
-      top: auto;
-      transform: none;
-  
-      width: 100%;
-      margin: 12px auto;
-  
-      flex-direction: row;
-      justify-content: center;
-      gap: 12px;
-  
-      padding: 12px;
-      border-radius: 12px;
-    }
-  
-    .navbar a {
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-    }
-  
-    /* ---------- RUNNER ---------- */
-    .running-container {
-      top: 20%;          /* clearly visible */
-    }
-  
-    .pixel-runner {
-      height: 90px;      /* smaller but readable */
-    }
-  
-    /* ---------- CHAT POSITION ---------- */
-    .chat-position {
-      position: relative;
-      margin-top: 16px;
-    }
-  
-    /* ---------- CHAT SIZE (KEY FIX) ---------- */
-    .chat-root {
-      width: 100%;
-      max-width: 320px;  /* tighter width */
-      margin: 8px auto;
-    }
-  
-    /* Messages list — CUT HARD */
-    .cbx-list {
-      height: 120px;     /* 👈 THIS is the main fix */
-      padding: 8px;
-    }
-  
-    /* Inputs */
-    .chat-root textarea {
-      font-size: 12px;
-      min-height: 32px;
-    }
-  
-    .chat-root input {
-      font-size: 11px;
-    }
-  
-    /* Reduce padding inside card */
-    .chat-form {
-      padding: 8px;
-    }
+  /* ---------- RUNNER (CENTER HERO) ---------- */
+  .running-container {
+    position: fixed;
+    top: 35%;                /* middle of screen */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 900;
   }
+
+  .pixel-runner {
+    height: 110px;           /* visible but not huge */
+  }
+
+  /* ---------- NAVBAR (TOP) ---------- */
+  .navbar {
+    position: fixed;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: auto;
+    padding: 12px 16px;
+    border-radius: 14px;
+
+    flex-direction: row;
+    justify-content: center;
+    gap: 14px;
+
+    z-index: 1000;
+  }
+
+  .navbar a {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+
+  /* ---------- CHAT (BOTTOM MID) ---------- */
+  .chat-position {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 950;
+  }
+
+  .chat-root {
+    width: 92vw;             /* almost full width */
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  /* Reduce chat height hard */
+  .cbx-list {
+    height: 110px;
+    padding: 8px;
+  }
+
+  .chat-root textarea {
+    min-height: 32px;
+    font-size: 12px;
+  }
+
+  .chat-root input {
+    font-size: 11px;
+  }
+
+  .chat-form {
+    padding: 8px;
+  }
+}
+
   
   
