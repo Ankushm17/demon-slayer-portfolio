@@ -289,3 +289,50 @@ textarea::placeholder {
     max-width: calc(100% - 20px);
   }
 }
+
+/* =========================
+   MOBILE RESPONSIVE FIXES
+   ========================= */
+   @media (max-width: 768px) {
+
+    /* Runner: smaller + higher */
+    .pixel-runner {
+      height: 120px;
+    }
+  
+    .running-container {
+      top: 8%;
+    }
+  
+    /* Navbar: move to top, full width */
+    .navbar {
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+  
+      width: 100%;
+      margin: 16px auto;
+  
+      flex-direction: row;
+      justify-content: center;
+      gap: 20px;
+      padding: 16px;
+      border-radius: 12px;
+    }
+  
+    /* Chatbox: normal document flow */
+    .chat-position {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      max-width: 100%;
+      margin-top: 24px;
+    }
+  
+    .chat-root {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+  
