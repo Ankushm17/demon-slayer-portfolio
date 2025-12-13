@@ -275,8 +275,8 @@ textarea::placeholder {
    ------------------------- */
 .chat-position {
   position: absolute;
-  left: 24%;      /* adjust as needed */
-  bottom: 40px;    /* adjust as needed */
+  left: 30%;      /* adjust as needed */
+  bottom: 140px;    /* adjust as needed */
   max-width: 520px;
   z-index: 50;
 }

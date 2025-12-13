@@ -1,25 +1,16 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-  const location = useLocation(); 
+  const location = useLocation();
+
+  // ✅ Hide navbar on non-home pages
+  if (location.pathname !== '/') return null;
 
   return (
     <nav className="navbar">
-      {/* Button 1 */}
-      <Link to="/" className={location.pathname === "/" ? "active" : ""}>
-        Home
-      </Link>
-
-      {/* Button 2 */}
-      <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>
-        About
-      </Link>
-
-      {/* Button 3 */}
-      <Link to="/projects" className={location.pathname === "/projects" ? "active" : ""}>
-        Projects
-      </Link>
+      <NavLink to="/" end>HOME</NavLink>
+      <NavLink to="/about">ABOUT</NavLink>
+      <NavLink to="/projects">PROJECTS</NavLink>
     </nav>
   );
 };
