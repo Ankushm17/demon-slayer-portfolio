@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Runner from './components/Runner';
 import Home from './pages/Home';
@@ -8,7 +8,7 @@ import './App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="app-container">
         
         {/* These stay on screen permanently */}
@@ -23,7 +23,7 @@ function App() {
 
         
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
