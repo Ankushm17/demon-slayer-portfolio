@@ -126,12 +126,12 @@
     }
   }
   
-  /* =========================
-     MOBILE (≤768px)
-     ========================= */
-  @media (max-width: 768px) {
-  
-    /* ----- NAVBAR ----- */
+/* =========================
+   MOBILE (≤768px) — COMPACT MODE
+   ========================= */
+   @media (max-width: 768px) {
+
+    /* ---------- NAVBAR ---------- */
     .navbar {
       position: relative;
       right: auto;
@@ -139,56 +139,63 @@
       transform: none;
   
       width: 100%;
-      margin: 16px auto;
+      margin: 12px auto;
   
       flex-direction: row;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
   
-      padding: 14px;
+      padding: 12px;
       border-radius: 12px;
     }
   
     .navbar a {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       letter-spacing: 1px;
     }
   
-    /* ----- RUNNER ----- */
+    /* ---------- RUNNER ---------- */
     .running-container {
-      top: 18%; /* moved lower so it's visible */
+      top: 20%;          /* clearly visible */
     }
   
     .pixel-runner {
-      height: 100px;
+      height: 90px;      /* smaller but readable */
     }
   
-    /* ----- CHAT ----- */
+    /* ---------- CHAT POSITION ---------- */
     .chat-position {
       position: relative;
-      left: auto;
-      bottom: auto;
-      max-width: 100%;
-      margin-top: 24px;
+      margin-top: 16px;
     }
   
+    /* ---------- CHAT SIZE (KEY FIX) ---------- */
     .chat-root {
       width: 100%;
-      max-width: 360px;
-      margin: 16px auto;
+      max-width: 320px;  /* tighter width */
+      margin: 8px auto;
     }
   
+    /* Messages list — CUT HARD */
     .cbx-list {
-      height: 160px; /* ~50% of desktop */
+      height: 120px;     /* 👈 THIS is the main fix */
+      padding: 8px;
     }
   
+    /* Inputs */
     .chat-root textarea {
-      font-size: 13px;
-      min-height: 36px;
+      font-size: 12px;
+      min-height: 32px;
     }
   
     .chat-root input {
-      font-size: 12px;
+      font-size: 11px;
+    }
+  
+    /* Reduce padding inside card */
+    .chat-form {
+      padding: 8px;
     }
   }
+  
   
