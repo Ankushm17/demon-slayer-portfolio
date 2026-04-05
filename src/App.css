@@ -1,129 +1,114 @@
-/* =========================
-   RESET & BASE
-   ========================= */
-   * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.app-shell__backdrop,
+.app-shell__texture,
+.crows-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.app-shell__backdrop {
+  background:
+    linear-gradient(135deg, rgba(20, 10, 8, 0.3), rgba(10, 18, 22, 0.24)),
+    url('./assets/background.jpeg') center/cover no-repeat;
+  transform: scale(1.03);
+  filter: saturate(1.12) contrast(1.04) brightness(1.02);
+}
+
+.app-shell__texture {
+  background:
+    linear-gradient(180deg, rgba(7, 6, 7, 0.08) 0%, rgba(7, 6, 7, 0.26) 100%),
+    radial-gradient(circle at top left, rgba(238, 84, 55, 0.12), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(41, 153, 168, 0.09), transparent 26%);
+  opacity: 1;
+}
+
+.app-shell__content {
+  position: relative;
+  z-index: 1;
+}
+
+.crows-overlay {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.crow {
+  position: absolute;
+  top: var(--crow-top);
+  left: -10%;
+  width: calc(var(--crow-size) * 2.8);
+  height: calc(var(--crow-size) * 1.6);
+  opacity: 0.38;
+  animation: crow-flight var(--crow-duration) linear infinite;
+  animation-delay: var(--crow-delay);
+  transform: translate3d(0, 0, 0);
+}
+
+.crow__wing,
+.crow__body {
+  position: absolute;
+  background: rgba(12, 12, 12, 0.88);
+}
+
+.crow__wing {
+  top: 0.35rem;
+  width: 48%;
+  height: 32%;
+  border-radius: 100% 100% 0 100%;
+  animation: crow-flap 900ms ease-in-out infinite;
+}
+
+.crow__wing--left {
+  left: 0;
+  transform-origin: right center;
+  transform: rotate(-18deg);
+}
+
+.crow__wing--right {
+  right: 0;
+  border-radius: 100% 100% 100% 0;
+  transform-origin: left center;
+  transform: rotate(18deg);
+  animation-delay: -450ms;
+}
+
+.crow__body {
+  top: 48%;
+  left: 50%;
+  width: 28%;
+  height: 18%;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes crow-flight {
+  0% {
+    transform: translate3d(-12vw, 0, 0) scale(0.88);
   }
-  
-  body {
-    background-image: url('./assets/background.jpeg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    min-height: 100vh;
+
+  50% {
+    transform: translate3d(56vw, -1.2rem, 0) scale(1);
   }
-  
-  /* Main app wrapper */
-  .app-container {
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
+
+  100% {
+    transform: translate3d(118vw, 0.9rem, 0) scale(0.92);
   }
-  
-  /* =========================
-     NAVBAR (DESKTOP)
-     ========================= */
-  .navbar {
-    position: fixed;
-    right: 25%;
-    top: 50%;
-    transform: translateY(-50%);
-  
-    background-color: rgba(0, 0, 0, 0.85);
-    padding: 40px;
-    border-radius: 20px;
-  
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  
-    z-index: 1000;
+}
+
+@keyframes crow-flap {
+  0%,
+  100% {
+    transform: rotate(-18deg) scaleY(1);
   }
-  
-  .navbar a {
-    font-family: 'Press Start 2P', cursive;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.2s ease;
-    text-shadow: 2px 2px #000000;
-  }
-  
-  .navbar a:hover {
-    color: #ff8906;
-    transform: scale(1.1);
-    text-shadow: 3px 3px #ff4d4d;
-  }
-  
-  .navbar a.active {
-    color: #ff8906;
-    border-left: 4px solid #ff8906;
-    padding-left: 10px;
-  }
-  
-  /* =========================
-     RUNNER GIF (DESKTOP)
-     ========================= */
-  .running-container {
-    position: fixed;
-    top: 12%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 999;
-  }
-  
-  .pixel-runner {
-    height: 200px;
-    transform: scaleX(-1);
-  }
-  
-  /* =========================
-     CHAT REFINEMENTS
-     ========================= */
-  .pixel-card {
-    background: linear-gradient(180deg, rgba(6,6,6,0.86), rgba(10,10,10,0.9));
-  }
-  
-  .pixel-card .font-pixel {
-    letter-spacing: 1px;
-  }
-  
-  /* Scrollbars */
-  .chat-scrollbar::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  
-  .chat-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.04);
-    border-radius: 8px;
-  }
-  
-  .cbx-list {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.06) transparent;
-  }
-  
-  /* =========================
-     SMALL DESKTOP TWEAKS
-     ========================= */
-  @media (max-width: 640px) {
-    .pixel-card {
-      border-radius: 8px;
-    }
-  
-    .font-pixel {
-      font-size: 11px;
-    }
+
+  50% {
+    transform: rotate(-4deg) scaleY(0.68);
   }
   
 /* =========================

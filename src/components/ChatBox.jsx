@@ -1,6 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "arcade_chat_messages_v1";
+const DEFAULT_MESSAGES = [
+  {
+    id: "muzan-default-message",
+    username: "Muzan",
+    text: "Click on Zenitsu.",
+    ts: 0,
+  },
+];
+
+function ensureDefaultMessages(storedMessages) {
+  const safeMessages = Array.isArray(storedMessages) ? storedMessages : [];
+  const hasMuzanMessage = safeMessages.some((message) => message.id === "muzan-default-message");
+  return hasMuzanMessage ? safeMessages : [...DEFAULT_MESSAGES, ...safeMessages];
+}
 
 function timeAgo(ts) {
   const seconds = Math.floor((Date.now() - ts) / 1000);
@@ -44,9 +58,9 @@ export default function ChatBox() {
   const [messages, setMessages] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
+      return raw ? ensureDefaultMessages(JSON.parse(raw)) : DEFAULT_MESSAGES;
     } catch {
-      return [];
+      return DEFAULT_MESSAGES;
     }
   });
 
@@ -102,22 +116,18 @@ export default function ChatBox() {
             className="cbx-list chat-scrollbar overflow-y-auto px-3 py-3 bg-neutral-900 text-white/90"
             style={{ borderTop: "1px solid rgba(255,255,255,0.02)" }}
           >
-            {messages.length === 0 ? (
-              <div className="text-center text-white/40 py-6 font-terminal">No messages yet — say hi!</div>
-            ) : (
-              messages.map((m) => (
-                <div key={m.id} className="message-row">
-                  <Avatar name={m.username} />
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <div className="username font-pixel">{m.username}</div>
-                      <div className="timestamp font-terminal">{timeAgo(m.ts)}</div>
-                    </div>
-                    <div className="text mt-1 font-terminal">{m.text}</div>
+            {messages.map((m) => (
+              <div key={m.id} className="message-row">
+                <Avatar name={m.username} />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <div className="username font-pixel">{m.username}</div>
+                    <div className="timestamp font-terminal">{m.ts === 0 ? "summons" : timeAgo(m.ts)}</div>
                   </div>
+                  <div className="text mt-1 font-terminal">{m.text}</div>
                 </div>
-              ))
-            )}
+              </div>
+            ))}
           </div>
 
           {/* === NEW: two-row input area === */}
@@ -128,7 +138,7 @@ export default function ChatBox() {
                 aria-label="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="name"
+                placeholder="slayer"
                 className="username-input-full"
               />
             </div>
@@ -138,9 +148,11 @@ export default function ChatBox() {
               <textarea
                 aria-label="message"
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                }}
                 onKeyDown={onKeyDownMessage}
-                placeholder="message"
+                placeholder="Click on Zenitsu"
                 rows={2}
                 className="message-input"
               />

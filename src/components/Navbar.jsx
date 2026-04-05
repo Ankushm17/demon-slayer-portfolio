@@ -1,18 +1,37 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom'
+
+const navItems = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/projects', label: 'Projects' },
+]
 
 const Navbar = () => {
-  const location = useLocation();
-
-  // ✅ Hide navbar on non-home pages
-  if (location.pathname !== '/') return null;
-
   return (
-    <nav className="navbar">
-      <NavLink to="/" end>HOME</NavLink>
-      <NavLink to="/about">ABOUT</NavLink>
-      <NavLink to="/projects">PROJECTS</NavLink>
-    </nav>
-  );
-};
+    <header className="site-header">
+      <div className="site-header__inner">
+        <div>
+          <p className="eyebrow">Upper Moon 3</p>
+          <h1 className="site-title">Ankush Madan</h1>
+        </div>
 
-export default Navbar;
+        <nav className="site-nav" aria-label="Primary navigation">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                `site-nav__link${isActive ? ' site-nav__link--active' : ''}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+      </div>
+    </header>
+  )
+}
+
+export default Navbar
