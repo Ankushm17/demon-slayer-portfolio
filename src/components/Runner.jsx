@@ -1,12 +1,26 @@
-import React from 'react';
-import runGif from '../assets/demon-slayer-run.gif'; // Import the image
+import runGif from '../assets/demon-slayer-run.gif'
 
-const Runner = () => {
+const Runner = ({ className = '', onClick, label = 'Zenitsu' }) => {
+  const runnerClassName = className ? `runner-badge ${className}` : 'runner-badge'
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={`${runnerClassName} runner-badge--interactive`}
+        onClick={onClick}
+        aria-label={label}
+      >
+        <img src={runGif} alt="" className="runner-badge__image" />
+      </button>
+    )
+  }
+
   return (
-    <div className="running-container">
-      <img src={runGif} alt="Demon Slayer Running" className="pixel-runner" />
+    <div className={runnerClassName} aria-hidden="true">
+      <img src={runGif} alt="" className="runner-badge__image" />
     </div>
-  );
-};
+  )
+}
 
-export default Runner;
+export default Runner
