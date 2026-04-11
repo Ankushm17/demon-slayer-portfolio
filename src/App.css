@@ -110,6 +110,7 @@
   50% {
     transform: rotate(-4deg) scaleY(0.68);
   }
+}
   
 /* =========================
    MOBILE LAYOUT (≤768px)
