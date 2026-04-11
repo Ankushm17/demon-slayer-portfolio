@@ -824,7 +824,7 @@ textarea {
 
 @media (max-width: 720px) {
   .site-header {
-    padding: 0.75rem 0.75rem 0;
+    padding: 0.5rem 0.75rem 0;
   }
 
   .site-header__inner,
@@ -847,8 +847,8 @@ textarea {
   }
 
   .hero-runner-strip {
-    margin-top: var(--home-stack-gap-mobile);
-    margin-bottom: var(--home-stack-gap-mobile);
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
   }
 
   .stats-grid {
@@ -912,7 +912,7 @@ textarea {
 @media (max-width: 520px) {
   .page-shell {
     width: min(100% - 0.75rem, 1120px);
-    padding-top: 0.75rem;
+    padding-top: 0.35rem;
   }
 
   .site-header__inner {
@@ -986,6 +986,10 @@ textarea {
 
   .runner-badge {
     min-height: 210px;
+  }
+
+  .runner-badge--banner {
+    min-height: auto;
   }
 
   .chat-header {
