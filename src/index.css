@@ -98,6 +98,20 @@ textarea {
   line-height: 1;
 }
 
+.site-brand {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.site-email {
+  margin: 0;
+  color: var(--ember-soft);
+  font-family: 'Cinzel', serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+
 .site-nav {
   display: flex;
   flex-wrap: wrap;
@@ -928,6 +942,10 @@ textarea {
 
   .site-nav {
     gap: 0.45rem;
+  }
+
+  .site-email {
+    font-size: 0.72rem;
   }
 
   .site-nav__link {
