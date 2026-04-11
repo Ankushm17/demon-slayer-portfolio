@@ -861,7 +861,7 @@ textarea {
 
   .hero-showcase__media--home,
   .home-chat-stage {
-    min-height: 920px;
+    min-height: 820px;
   }
 
   .hero-showcase__copy {
@@ -905,11 +905,29 @@ textarea {
   }
 
   .cbx-list {
-    max-height: 280px;
+    max-height: 240px;
   }
 }
 
 @media (max-width: 520px) {
+  .page-shell {
+    width: min(100% - 0.75rem, 1120px);
+    padding-top: 0.75rem;
+  }
+
+  .site-header__inner {
+    padding: 0.85rem;
+  }
+
+  .site-nav {
+    gap: 0.45rem;
+  }
+
+  .site-nav__link {
+    flex-basis: 88px;
+    padding: 0.62rem 0.55rem;
+  }
+
   .hero-panel__copy,
   .hero-panel__visual,
   .info-card,
@@ -919,20 +937,48 @@ textarea {
   }
 
   .hero-showcase__media {
-    min-height: 860px;
+    min-height: 760px;
   }
 
   .hero-showcase__media--home,
   .home-chat-stage {
-    min-height: 960px;
+    min-height: 780px;
+  }
+
+  .home-chat-stage {
+    align-content: center;
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+
+  .home-chat-stage__intro {
+    padding: 0.8rem;
+  }
+
+  .home-chat-panel {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .home-chat-panel .section-heading {
+    margin-bottom: 0.65rem;
+  }
+
+  .home-chat-panel .section-title {
+    font-size: 1.35rem;
   }
 
   .runner-badge--banner {
-    width: min(100%, 620px);
+    width: min(132vw, 620px);
+    margin-inline: calc((100% - min(132vw, 620px)) / 2);
+  }
+
+  .runner-badge--banner .runner-badge__image {
+    transform: scaleX(-1) scale(1.34);
   }
 
   .hero-showcase__title {
-    font-size: 2.25rem;
+    font-size: 1.95rem;
   }
 
   .hero-showcase__text {
@@ -949,6 +995,58 @@ textarea {
 
   .runner-badge {
     min-height: 210px;
+  }
+
+  .runner-badge--banner {
+    min-height: 150px;
+  }
+
+  .chat-header {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.92rem;
+  }
+
+  .cbx-list {
+    max-height: 190px;
+    padding: 0.7rem;
+  }
+
+  .message-row {
+    gap: 0.65rem;
+    padding: 0.65rem 0;
+  }
+
+  .avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-basis: 2.25rem;
+  }
+
+  .chat-form {
+    padding: 0.7rem;
+  }
+
+  .form-row-first {
+    margin-bottom: 0.55rem;
+  }
+
+  .form-row-second {
+    gap: 0.55rem;
+  }
+
+  .username-input-full,
+  .message-input {
+    border-radius: 0.75rem;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .message-input {
+    min-height: 72px;
+  }
+
+  .send-btn {
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
   }
 
   .hero-panel__title {
