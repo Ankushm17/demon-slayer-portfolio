@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "arcade_chat_messages_v1";
+const MUZAN_AVATAR_SRC = `${import.meta.env.BASE_URL}muzan-avatar.jpg`;
 const DEFAULT_MESSAGES = [
   {
     id: "muzan-default-message",
     username: "Muzan",
     text: "Click on Zenitsu.",
+    avatarSrc: MUZAN_AVATAR_SRC,
     ts: 0,
   },
 ];
@@ -13,7 +15,13 @@ const DEFAULT_MESSAGES = [
 function ensureDefaultMessages(storedMessages) {
   const safeMessages = Array.isArray(storedMessages) ? storedMessages : [];
   const hasMuzanMessage = safeMessages.some((message) => message.id === "muzan-default-message");
-  return hasMuzanMessage ? safeMessages : [...DEFAULT_MESSAGES, ...safeMessages];
+  if (!hasMuzanMessage) return [...DEFAULT_MESSAGES, ...safeMessages];
+
+  return safeMessages.map((message) =>
+    message.id === "muzan-default-message"
+      ? { ...DEFAULT_MESSAGES[0], ...message, avatarSrc: MUZAN_AVATAR_SRC }
+      : message
+  );
 }
 
 function timeAgo(ts) {
@@ -32,7 +40,7 @@ function timeAgo(ts) {
   return `${years}y`;
 }
 
-function Avatar({ name }) {
+function Avatar({ name, src }) {
   const initials = (name || "U")
     .split(" ")
     .map((n) => n[0])
@@ -41,7 +49,7 @@ function Avatar({ name }) {
     .toUpperCase();
   return (
     <div className="avatar w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-sm font-bold text-white/90">
-      {initials}
+      {src ? <img src={src} alt="" className="avatar__image" /> : initials}
     </div>
   );
 }
@@ -118,7 +126,7 @@ export default function ChatBox() {
           >
             {messages.map((m) => (
               <div key={m.id} className="message-row">
-                <Avatar name={m.username} />
+                <Avatar name={m.username} src={m.avatarSrc} />
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <div className="username font-pixel">{m.username}</div>
