@@ -6,13 +6,16 @@ const navItems = [
   { to: '/projects', label: 'Projects' },
 ]
 
+const email = 'ankushmadan17@gmail.com'
+
 const Navbar = () => {
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <div>
+        <div className="site-brand">
           <p className="eyebrow">Upper Moon 3</p>
           <h1 className="site-title">Ankush Madan</h1>
+          <a className="site-email" href={`mailto:${email}`}>{email}</a>
         </div>
 
         <nav className="site-nav" aria-label="Primary navigation">
