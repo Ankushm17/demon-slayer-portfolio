@@ -847,29 +847,8 @@ textarea {
   }
 
   .hero-runner-strip {
-    align-items: center;
-    margin-top: 0.35rem;
-    margin-bottom: 0.15rem;
-    min-height: 115px;
-    overflow: hidden;
-  }
-
-  .runner-badge--banner {
-    position: relative;
-    width: 100%;
-    max-width: none;
-    min-height: 115px;
-    overflow: hidden;
-  }
-
-  .runner-badge--banner .runner-badge__image {
-    position: absolute;
-    top: 50%;
-    left: 42%;
-    width: 520px;
-    max-width: none;
-    transform: translateY(-50%) scaleX(-1);
-    transform-origin: left center;
+    margin-top: var(--home-stack-gap-mobile);
+    margin-bottom: var(--home-stack-gap-mobile);
   }
 
   .stats-grid {
@@ -989,21 +968,6 @@ textarea {
     font-size: 1.35rem;
   }
 
-  .runner-badge--banner {
-    width: 100%;
-    min-height: 110px;
-    margin-inline: 0;
-  }
-
-  .runner-badge--banner .runner-badge__image {
-    left: 38%;
-    width: 560px;
-    max-width: none;
-    height: auto;
-    opacity: 1;
-    transform: translateY(-50%) scaleX(-1);
-  }
-
   .hero-showcase__title {
     font-size: 1.95rem;
   }
@@ -1022,13 +986,6 @@ textarea {
 
   .runner-badge {
     min-height: 210px;
-  }
-
-  .hero-runner-strip {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    min-height: 110px;
   }
 
   .chat-header {
