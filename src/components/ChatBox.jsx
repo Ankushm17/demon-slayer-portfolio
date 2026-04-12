@@ -1,30 +1,39 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const STORAGE_KEY = "arcade_chat_messages_v1";
+const STORAGE_KEY = "muzan_profile_chat_v1";
 const MUZAN_AVATAR_SRC = `${import.meta.env.BASE_URL}muzan-avatar.jpg`;
+const CHAT_API_URL = import.meta.env.VITE_CHAT_API_URL || "/api/chat";
+const SUGGESTED_PROMPTS = [
+  "What does Ankush do?",
+  "Tell me about his Citi work",
+  "What are his best projects?",
+  "What skills does he have?",
+];
+
 const DEFAULT_MESSAGES = [
   {
-    id: "muzan-default-message",
+    id: "muzan-welcome-message",
+    role: "assistant",
     username: "Muzan",
-    text: "Click on Zenitsu.",
+    text: "I am Muzan. Ask me about Ankush Madan's experience, skills, projects, education, or contact details.",
     avatarSrc: MUZAN_AVATAR_SRC,
     ts: 0,
   },
 ];
 
-function ensureDefaultMessages(storedMessages) {
-  const safeMessages = Array.isArray(storedMessages) ? storedMessages : [];
-  const hasMuzanMessage = safeMessages.some((message) => message.id === "muzan-default-message");
-  if (!hasMuzanMessage) return [...DEFAULT_MESSAGES, ...safeMessages];
-
-  return safeMessages.map((message) =>
-    message.id === "muzan-default-message"
-      ? { ...DEFAULT_MESSAGES[0], ...message, avatarSrc: MUZAN_AVATAR_SRC }
-      : message
-  );
+function createMessage(role, text) {
+  return {
+    id: `${role}-${Date.now()}-${Math.random()}`,
+    role,
+    username: role === "assistant" ? "Muzan" : "You",
+    text,
+    avatarSrc: role === "assistant" ? MUZAN_AVATAR_SRC : "",
+    ts: Date.now(),
+  };
 }
 
 function timeAgo(ts) {
+  if (!ts) return "summons";
   const seconds = Math.floor((Date.now() - ts) / 1000);
   if (seconds < 10) return "just now";
   if (seconds < 60) return `${seconds}s`;
@@ -33,40 +42,62 @@ function timeAgo(ts) {
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h`;
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d`;
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo`;
-  const years = Math.floor(months / 12);
-  return `${years}y`;
+  return `${days}d`;
+}
+
+function parseBold(text) {
+  const parts = text.split(/\*\*(.*?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+  );
+}
+
+function renderMarkdown(text) {
+  const lines = text.split('\n');
+  const elements = [];
+  let listItems = [];
+
+  lines.forEach((line, i) => {
+    const isBullet = /^[-*]\s/.test(line.trim());
+
+    if (isBullet) {
+      const content = line.trim().replace(/^[-*]\s/, '');
+      listItems.push(<li key={i}>{parseBold(content)}</li>);
+    } else {
+      if (listItems.length) {
+        elements.push(<ul key={`ul-${i}`} className="msg-list">{listItems}</ul>);
+        listItems = [];
+      }
+      if (line.trim()) {
+        elements.push(<p key={i} className="msg-para">{parseBold(line)}</p>);
+      }
+    }
+  });
+
+  if (listItems.length) {
+    elements.push(<ul key="ul-end" className="msg-list">{listItems}</ul>);
+  }
+
+  return elements.length ? elements : text;
 }
 
 function Avatar({ name, src }) {
-  const initials = (name || "U")
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  const initials = (name || "U").slice(0, 2).toUpperCase();
+
   return (
-    <div className="avatar w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-sm font-bold text-white/90">
+    <div className="avatar">
       {src ? <img src={src} alt="" className="avatar__image" /> : initials}
     </div>
   );
 }
 
 export default function ChatBox() {
-  const [username, setUsername] = useState(() => {
-    try {
-      return localStorage.getItem("arcade_chat_name") || "";
-    } catch {
-      return "";
-    }
-  });
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? ensureDefaultMessages(JSON.parse(raw)) : DEFAULT_MESSAGES;
+      const storedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      return Array.isArray(storedMessages) && storedMessages.length ? storedMessages : DEFAULT_MESSAGES;
     } catch {
       return DEFAULT_MESSAGES;
     }
@@ -75,106 +106,148 @@ export default function ChatBox() {
   const listRef = useRef(null);
 
   useEffect(() => {
+    const normalizedMessages = messages.map((item) =>
+      item.role === "assistant" ? { ...item, avatarSrc: MUZAN_AVATAR_SRC } : item
+    );
+
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedMessages));
     } catch {}
+
     if (listRef.current) {
       listRef.current.scrollTo({ top: listRef.current.scrollHeight + 200, behavior: "smooth" });
     }
   }, [messages]);
 
-  useEffect(() => {
+  async function sendQuestion(question) {
+    const trimmedQuestion = question.trim();
+    if (!trimmedQuestion || isLoading) return;
+
+    const userMessage = createMessage("user", trimmedQuestion);
+    const nextMessages = [...messages, userMessage];
+
+    setMessages(nextMessages);
+    setMessage("");
+    setIsLoading(true);
+
     try {
-      localStorage.setItem("arcade_chat_name", username);
-    } catch {}
-  }, [username]);
+      const response = await fetch(CHAT_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: nextMessages.map(({ role, text }) => ({ role, content: text })),
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Muzan is silent right now.");
+
+      setMessages((prev) => [...prev, createMessage("assistant", data.reply)]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        createMessage(
+          "assistant",
+          "I don't have the power to answer this question, please reach out to Ankush at ankushmadan17@gmail.com"
+        ),
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   function handleSend(e) {
-    e?.preventDefault();
-    if (!username.trim() || !message.trim()) return;
-    const newMsg = {
-      id: Date.now() + Math.random(),
-      username: username.trim(),
-      text: message.trim(),
-      ts: Date.now(),
-    };
-    setMessages((prev) => [...prev, newMsg]);
-    setMessage("");
+    e.preventDefault();
+    sendQuestion(message);
   }
 
   function onKeyDownMessage(e) {
-    // Enter to send, Shift+Enter for newline
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      sendQuestion(message);
     }
   }
 
   return (
-    <div className="chat-root max-w-2xl mx-auto">
-      {/* header */}
-      <div className="chat-header">CHATBOX</div>
-
-      {/* card */}
-      <div className="pixel-card rounded-b-lg overflow-hidden mt-0 shadow-lg">
-        <div className="flex flex-col">
-          {/* messages list */}
-          <div
-            ref={listRef}
-            className="cbx-list chat-scrollbar overflow-y-auto px-3 py-3 bg-neutral-900 text-white/90"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.02)" }}
-          >
-            {messages.map((m) => (
-              <div key={m.id} className="message-row">
-                <Avatar name={m.username} src={m.avatarSrc} />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className="username font-pixel">{m.username}</div>
-                    <div className="timestamp font-terminal">{m.ts === 0 ? "summons" : timeAgo(m.ts)}</div>
-                  </div>
-                  <div className="text mt-1 font-terminal">{m.text}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* === NEW: two-row input area === */}
-          <form onSubmit={handleSend} className="chat-form px-3 py-3 bg-neutral-800/80 border-t border-white/6">
-            {/* Row 1: full-width name input */}
-            <div className="form-row-first">
-              <input
-                aria-label="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="slayer"
-                className="username-input-full"
-              />
-            </div>
-
-            {/* Row 2: message textarea (left) + send button (right) */}
-            <div className="form-row-second">
-              <textarea
-                aria-label="message"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                }}
-                onKeyDown={onKeyDownMessage}
-                placeholder="Click on Zenitsu"
-                rows={2}
-                className="message-input"
-              />
-
-              <button
-                type="submit"
-                className="send-btn"
-                aria-label="Send message"
-              >
-                SEND
-              </button>
-            </div>
-          </form>
+    <div className="chat-root">
+      <div className="muzan-panel">
+        <img src={MUZAN_AVATAR_SRC} alt="" className="muzan-panel__portrait" />
+        <div className="muzan-panel__copy">
+          <p className="muzan-panel__eyebrow">AI Demon</p>
+          <h3 className="muzan-panel__title">Muzan</h3>
+          <p className="muzan-panel__text">
+            Ask about Ankush&apos;s work, projects, stack, education, or how to reach him.
+          </p>
         </div>
+        <div className={`muzan-panel__status${isLoading ? " muzan-panel__status--active" : ""}`}>
+          {isLoading ? "Thinking" : "Online"}
+        </div>
+      </div>
+
+      <div className="pixel-card">
+        <div
+          ref={listRef}
+          className="cbx-list chat-scrollbar"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.02)" }}
+        >
+          {messages.map((item) => (
+            <div key={item.id} className={`message-row message-row--${item.role}`}>
+              <Avatar name={item.username} src={item.avatarSrc} />
+              <div className="message-content">
+                <div className="message-meta">
+                  <div className="username">{item.username}</div>
+                  <div className="timestamp">{timeAgo(item.ts)}</div>
+                </div>
+                <div className="text">{renderMarkdown(item.text)}</div>
+              </div>
+            </div>
+          ))}
+          {isLoading && (
+            <div className="message-row message-row--assistant">
+              <Avatar name="Muzan" src={MUZAN_AVATAR_SRC} />
+              <div className="message-content">
+                <div className="message-meta">
+                  <div className="username">Muzan</div>
+                  <div className="timestamp">now</div>
+                </div>
+                <div className="text text--thinking">Reading Ankush&apos;s records...</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="chat-prompts" aria-label="Suggested questions">
+          {SUGGESTED_PROMPTS.map((prompt) => (
+            <button
+              key={prompt}
+              type="button"
+              className="prompt-chip"
+              onClick={() => sendQuestion(prompt)}
+              disabled={isLoading}
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
+
+        <form onSubmit={handleSend} className="chat-form">
+          <div className="form-row-second">
+            <textarea
+              aria-label="Ask Muzan about Ankush"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={onKeyDownMessage}
+              placeholder="Ask Muzan about Ankush..."
+              rows={2}
+              className="message-input"
+              disabled={isLoading}
+            />
+
+            <button type="submit" className="send-btn" aria-label="Send question" disabled={isLoading}>
+              {isLoading ? "THINKING" : "ASK"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
