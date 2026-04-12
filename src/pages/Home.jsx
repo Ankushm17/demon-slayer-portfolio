@@ -37,18 +37,7 @@ const Home = () => {
           <div className="hero-showcase__frame" aria-hidden="true" />
 
           <div className="home-chat-stage">
-            <div className="home-chat-stage__intro">
-              <p className="eyebrow">Crow Messenger</p>
-              <h2 className="hero-showcase__title">Step into the castle and leave a message.</h2>
-            </div>
-
-            <article className="info-card chat-panel home-chat-panel">
-              <div className="section-heading">
-                <p className="section-label">Incoming Crows</p>
-                <h3 className="section-title">Crow Messenger</h3>
-              </div>
-              <ChatBox />
-            </article>
+            <ChatBox />
           </div>
         </div>
       </section>
